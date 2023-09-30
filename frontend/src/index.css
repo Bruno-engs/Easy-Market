@@ -1,0 +1,402 @@
+main {
+  min-height: 80vh;
+}
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+:root{
+    --primary: 20,33,61;
+    --secondary: 252,163,17;
+    --green:25, 135, 84;
+    --light: #adb5bd;
+    --border: #dee2e6;
+    --border-btn: #edf2f4;
+}
+
+html,
+body{
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Open Sans';
+    letter-spacing: -0.03em;
+}
+
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=date]{
+    font-size: 15px;
+}
+
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=date],
+input[type=text]:disabled,
+input[type=email]:disabled,
+input[type=password]:disabled,
+input[type=date]:disabled{
+    background: #f6f5f5;
+    border: 0.5px colid #dcdcdc;
+    outline: none;
+    color: #626264;
+}
+
+.bg-primary{
+    background-color: rgba(var(--primary)) !important;
+}
+
+.btnn{
+    font-size: 15px;
+    color: #f6f5f5
+}
+
+.bg-secondary{
+    background-color: rgba(var(--secondary)) !important;
+}
+
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:disabled,
+.btn-primary:hover{
+    background-color: rgb(var(--primary)) !important;
+    border-color: rgb(var(--primary));
+}
+
+.btn-secondary,
+.btn-secondary:focus,
+.btn-secondary:active,
+.btn-secondary:disabled,
+.btn-secondary:hover{
+    background-color: rgb(var(--secondary)) !important;
+    border-color: rgb(var(--secondary));
+}
+
+.btn-green,
+.btn-green:focus,
+.btn-green:active,
+.btn-green:disabled,
+.btn-green:hover{
+    background-color: rgb(var(--green)) !important;
+    border-color: rgb(var(--green));
+}
+
+.btn-back,
+.btn-back:focus,
+.btn-back:active,
+.btn-back:disabled,
+.btn-back:hover{
+    background-color: rgb(var(--light)) !important;
+    color: rgb(var(--primary));
+    border-radius: 100%;
+}
+
+.badge{
+    font-weight: lighter;
+}
+
+.badge.badge-primary {
+    background-color: rgba(var(--primary), 0.1);
+    color: rgb(var(--primary));
+}
+
+.badge.bage-secondary {
+    background-color: rgba(var(--secondary), 0.1);
+    color: rgb(var(--secondary));
+}
+
+.box{
+    background: #fff;
+    box-shadow: 0px 0px 11px 6px rgba(0,0,0,0.08);
+    border-radius: 5px;
+    display: inline-block;
+    padding: 50px;
+}
+
+div.back{
+    position: absolute;
+    top: 35px;
+
+}
+
+h3 {
+  padding: 1rem 0;
+}
+
+h1 {
+  font-size: 1.8rem;
+  padding: 1rem 0;
+}
+
+h2 {
+  font-size: 1.4rem;
+  padding: 0.5rem 0;
+}
+
+.rating span {
+  margin: 0.1rem;
+}
+
+/* carousel */
+.carousel-item-next,
+.carousel-item-prev,
+.carousel-item.active {
+  display: flex;
+  background-color: white;
+  border-radius: 100px;
+}
+.carousel-caption {
+  position: absolute;
+  top: 0;
+}
+
+.carousel-caption h2 {
+  color: #000;
+}
+
+.carousel img {
+  height: 350px;
+  padding: 30px;
+  margin: 40px;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.carousel a {
+  margin: 0 auto;
+}
+
+
+@media (max-width: 900px) {
+  .carousel-caption h2 {
+    font-size: 2.5vw;
+  }
+}
+
+
+.navbar-brand {
+  display: inline-block;
+  padding-top: 0.3359375rem;
+  padding-bottom: 0.3359375rem;
+  margin-right: 1rem;
+  font-size: 30px;
+  color: azure;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  line-height: inherit;
+  white-space: nowrap;
+}
+.text-primary {
+  color:#14213D !important;
+}
+
+.product {
+  margin-bottom: 50px;
+}
+
+.product.active,
+.product:hover{
+cursor: pointer;
+  border-radius: 5px;
+border: 5px solid rgb(var(--primary));
+transition: all ease 0.3s;
+background-color: #f6f5f5;
+}
+
+.badge{
+  font-size: 12px;
+  font-weight: lighter;
+  border-radius: 5px;
+
+}
+
+.badge.badge-primary {
+  background-color: rgba(var(--primary), 0.1);
+  color: rgb(var(--primary));
+}
+
+.store{
+  list-style: none;
+  padding: 7px;
+  margin-right: 20px;
+  border-radius: 5px;
+  border-bottom: 3px solid transparent;
+  transition: 0.5s;
+}
+
+.store.active,
+.store:hover{
+cursor: pointer;
+border-bottom: 3px solid rgb(var(--primary));
+transition: all ease 0.3s;
+background-color: #f6f5f5;
+}
+
+.store img {
+  width: 80px;
+  border-radius: 5px;
+  vertical-align: baseline;
+
+}
+
+.store b{
+  margin-bottom: 0;
+}
+
+.store-infos span{
+  vertical-align: middle;
+  color: #626264;
+}
+
+.store-infos span.mdi-star{
+  color: #facd5d;
+}
+
+.store-infos span{
+  vertical-align: middle;
+  color: #626264;
+}
+
+.store-infos span.mdi-star{
+  color: #facd5d;
+}
+
+.store-infos text{
+  font-size: 13px;
+  margin-right: 10px;
+  vertical-align: middle;
+  color: #626264;
+}
+
+.store-image{
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.product-button{
+
+  margin-top: 15px;
+
+}
+
+
+b.thicker {
+  font-weight: 900;
+}
+
+.store-list{
+  padding: 15px;
+  white-space: nowrap;
+  overflow-x: auto;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.container-map {
+  height: calc(200% );
+}
+
+.img-marker{
+  width: 48px;
+  position: absolute;
+  top: 15px;
+  left: 24px;
+  border-radius: 100%;
+}
+
+
+.sidebar h5{
+  height: 30px;
+  margin-bottom: 0;
+}
+
+.sidebar .products {
+  height: calc(100% - 190px);
+  overflow: auto;
+  align-content: flex-start;
+}
+
+.sidebar .footer{
+  height: 160px;
+  background-color: #f6f5f5;
+}
+
+.btn{
+  font-size: 15px;
+  color: #f6f5f5;
+  border-radius: 5px;
+  padding: 12px;
+  
+}
+.trh{
+  font-size: 15px;
+  color: #dc3545;
+  border-radius: 5px;
+  padding: 0px;
+  background-color: transparent;
+  
+}.edt{
+  font-size: 15px;
+  color: rgb(var(--secondary));
+  border-radius: 5px;
+  padding: 0px;
+  background-color: transparent;
+  
+}
+
+.btnn{
+  font-size: 15px;
+  color: #f6f5f5;
+  border-radius: 5px;
+  padding: 10px;
+  
+}
+
+.btn-secondary,
+.btn-secondary:focus,
+.btn-secondary:active,
+.btn-secondary:disabled,
+.btn-secondary:hover{
+    background-color: rgb(var(--secondary)) !important;
+    border-color: rgb(var(--secondary));
+}
+
+
+
+
+
+.product-list{
+  margin-top: 10px;
+}
+
+.product-list-r.active,
+.product-list-r:hover{
+cursor: pointer;
+  border-radius: 5px;
+border: 3.5px solid rgb(255,0,0);
+transition: all ease 0.3s;
+background-color: #f6f5f5;
+}
+
+.product-list .badge  {
+  margin-bottom: 0; 
+}
+
+.product-list img {
+  border: 1px solid #dcdcdcdc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.product-list small{
+  margin-top: 0;
+  line-height: 15px;
+  display: block;
+}
+
+.product-list button {
+  position: absolute;
+  right: 110px;
+  padding: 1px 14px;
+  font: 25px;
+  margin-top: 20px;
+}
