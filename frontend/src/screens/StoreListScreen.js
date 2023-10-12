@@ -4,21 +4,26 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import Paginate from '../components/Paginate'
+//import Paginate from '../components/Paginate'
 import {
-  listStore,
   deleteStore,
   createStore,
+  listMyStores,
 } from '../actions/storeActions'
 import { STORE_CREATE_RESET } from '../constants/storeConstants'
+//import Paginate2 from '../components/Paginate2'
 
 const StoreListScreen = ({ history, match }) => {
   const pageNumber = match.params.pageNumber || 1
 
   const dispatch = useDispatch()
 
-  const storeList = useSelector((state) => state.storeList)
-  const { loading, error, stores, page, pages } = storeList
+  
+  const storeList = useSelector((state) => state.storesListMy)
+  const {  stores } = storeList
+
+  //const storeList = useSelector((state) => state.storeList)
+  //const { loading, error, stores, page, pages } = storeList
 
   const storeDelete = useSelector((state) => state.storeDelete)
   const {
@@ -51,7 +56,8 @@ const StoreListScreen = ({ history, match }) => {
     if (successCreate) {
       //history.push(`/admin/store/${createdStore?._id}/edit`)
     } else {
-      dispatch(listStore('', pageNumber))
+      dispatch(listMyStores('', pageNumber))
+      //dispatch(listStore('', pageNumber))
     }
   }, [
     dispatch,
@@ -91,11 +97,7 @@ const StoreListScreen = ({ history, match }) => {
       {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
       {loadingCreate && <Loader />}
       {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant='danger'>{error}</Message>
-      ) : (
+
         <>
           <Table striped bordered hover responsive className='table-sm'>
             <thead className='text-center'>
@@ -108,7 +110,9 @@ const StoreListScreen = ({ history, match }) => {
             </thead>
             <tbody className='text-center'>
               {stores?.map((stores) => (
-                <tr key={stores?._id}>
+                <tr key={stores?._id}
+                onClick={() => history.push(`/admin/store/${stores._id}`)}
+                >
                   <td>{stores?._id}</td>
                   <td>{stores?.name}</td>
                   <td>{stores?.category}</td>
@@ -130,9 +134,7 @@ const StoreListScreen = ({ history, match }) => {
               ))}
             </tbody>
           </Table>
-          <Paginate pages={pages} page={page} isAdmin={true} />
         </>
-      )}
     </>
   )
 }

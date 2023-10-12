@@ -5,7 +5,7 @@ import Product from '../models/productModel.js'
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 10
+  const pageSize = 8
   const page = Number(req.query.pageNumber) || 1
 
   const keyword = req.query.keyword
@@ -80,6 +80,7 @@ const createProduct = asyncHandler(async (req, res) => {
 const updateProduct = asyncHandler(async (req, res) => {
   const {
     name,
+    store_id,
     price,
     description,
     image,
@@ -92,6 +93,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 
   if (product) {
     product.name = name
+    product.store_id = store_id
     product.price = price
     product.description = description
     product.image = image

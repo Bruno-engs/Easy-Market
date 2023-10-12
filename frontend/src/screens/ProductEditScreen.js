@@ -1,6 +1,8 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import {
+  listMyStores,
+} from '../actions/storeActions'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
@@ -13,6 +15,7 @@ const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id
 
   const [name, setName] = useState('')
+  const [store_id, setStoreId] = useState('')
   const [price, setPrice] = useState(0)
   const [image, setImage] = useState('')
   const [brand, setBrand] = useState('')
@@ -25,6 +28,9 @@ const ProductEditScreen = ({ match, history }) => {
 
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error, product } = productDetails
+
+  const storeList = useSelector((state) => state.storesListMy)
+  const { stores } = storeList
 
   const productUpdate = useSelector((state) => state.productUpdate)
   const {
@@ -42,6 +48,7 @@ const ProductEditScreen = ({ match, history }) => {
         dispatch(listProductDetails(productId))
       } else {
         setName(product.name)
+        setStoreId(product.store_id)
         setPrice(product.price)
         setImage(product.image)
         setBrand(product.brand)
@@ -50,6 +57,7 @@ const ProductEditScreen = ({ match, history }) => {
         setDescription(product.description)
       }
     }
+    dispatch(listMyStores())
   }, [dispatch, history, productId, product, successUpdate])
 
   const uploadFileHandler = async (e) => {
@@ -81,6 +89,7 @@ const ProductEditScreen = ({ match, history }) => {
       updateProduct({
         _id: productId,
         name,
+        store_id,
         price,
         image,
         brand,
@@ -93,11 +102,9 @@ const ProductEditScreen = ({ match, history }) => {
 
   return (
     <>
-      <Link to='/admin/productlist' className='btn btn-light my-3'>
-        Go Back
-      </Link>
+      
       <FormContainer>
-        <h1>Edit Product</h1>
+        <h1>Alterar Produto</h1>
         {loadingUpdate && <Loader />}
         {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
         {loading ? (
@@ -116,6 +123,21 @@ const ProductEditScreen = ({ match, history }) => {
               ></Form.Control>
             </Form.Group>
 
+
+            <Form.Group controlId='stores'>
+              <Form.Label>Store({store_id})</Form.Label>
+              <Form.Control
+                as='select'
+                onChange={(e) => setStoreId(e.target.value)}
+              >
+                {stores?.map((stores) => (
+                  <option key={stores?._id} value={stores?._id}>
+                    {stores?.name}
+                  </option>
+                ))}
+
+              </Form.Control>
+            </Form.Group>
             <Form.Group controlId='price'>
               <Form.Label>Price</Form.Label>
               <Form.Control

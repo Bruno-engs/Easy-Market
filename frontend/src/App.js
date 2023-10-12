@@ -16,6 +16,7 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen'
 import OrderScreen from './screens/OrderScreen'
 import UserListScreen from './screens/UserListScreen'
 import UserEditScreen from './screens/UserEditScreen'
+import ProductsTableScreen from './screens/ProductsTableScreen'
 import ProductListScreen from './screens/ProductListScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
@@ -31,7 +32,7 @@ const App = () => {
       <Header />
       <main className='py-3'>
         <Container>
-        <Sidebar/>
+          <Sidebar />
           <Route path='/order/:id' component={OrderScreen} />
           <Route path='/shipping' component={ShippingScreen} />
           <Route path='/payment' component={PaymentScreen} />
@@ -61,6 +62,11 @@ const App = () => {
             exact
           />
           <Route
+            path='/admin/store/:id'
+            component={ProductsTableScreen}
+            exact
+          />
+          <Route
             path='/admin/storelist/:pageNumber'
             component={StoreListScreen}
             exact
@@ -70,12 +76,12 @@ const App = () => {
           <Route path='/products/:keyword' component={SearchScreen} exact />
           <Route path='/page/:pageNumber' component={HomeScreen} exact />
           <Route
-            path='/search/:keyword/page/:pageNumber'
-            component={HomeScreen}
+            path='/products/:keyword/page/:pageNumber'
+            component={SearchScreen}
             exact
           />
           <Route path='/' component={HomeScreen} exact />
-          
+
         </Container>
       </main>
       <Footer />

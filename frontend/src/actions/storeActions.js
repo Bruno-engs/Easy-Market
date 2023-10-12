@@ -1,5 +1,11 @@
 import axios from 'axios'
 import {
+  STORES_LIST_MY_REQUEST,
+  STORES_LIST_MY_SUCCESS,
+  STORES_LIST_MY_FAIL,
+  STORES_REQUEST,
+  STORES_SUCCESS,
+  STORES_FAIL,
   STORE_LIST_REQUEST,
   STORE_LIST_SUCCESS,
   STORE_LIST_FAIL,
@@ -24,9 +30,73 @@ import {
 } from '../constants/storeConstants'
 import { logout } from './userActions'
 
-//////Stores abaixo
+//////Stores abaixo sem paginação
 
+export const storesAll = () => async (
+  dispatch
+) => {
+  try {
+    dispatch({ type: STORES_REQUEST })
 
+    const { data } = await axios.get(
+      `/stores`
+    )
+
+    dispatch({
+      type: STORES_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: STORES_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+/////
+
+/////
+export const listMyStores = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: STORES_LIST_MY_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/store/mystores`, config)
+
+    dispatch({
+      type: STORES_LIST_MY_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: STORES_LIST_MY_FAIL,
+      payload: message,
+    })
+  }
+}
+
+////// requests stores
 export const listStore = (keyword = '', pageNumber = '') => async (
   dispatch
 ) => {
@@ -34,7 +104,7 @@ export const listStore = (keyword = '', pageNumber = '') => async (
     dispatch({ type: STORE_LIST_REQUEST })
 
     const { data } = await axios.get(
-      `/api/store`
+      `/api/store?keyword=${keyword}&pageNumber=${pageNumber}`
     )
 
     dispatch({

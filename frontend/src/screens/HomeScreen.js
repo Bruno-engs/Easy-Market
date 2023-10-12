@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from 'react-redux'
 //import Paginate from '../components/Paginate'
 import ProductCarousel from '../components/ProductCarousel'
 import Meta from '../components/Meta'
-import { listProducts } from '../actions/productActions'
-import { listStore } from '../actions/storeActions'
+import { productsAll } from '../actions/productActions'
+import { storesAll } from '../actions/storeActions'
 import SearchBox from '../components/SearchBox'
 import { Route } from 'react-router-dom'
 import Store from '../components/Store'
@@ -25,14 +25,14 @@ const HomeScreen = ({ match }) => {
   const pageNumber = match.params.pageNumber || 1
 
   const dispatch = useDispatch()
-  const productList = useSelector((state) => state.productList)
+  const productList = useSelector((state) => state.allProducts)
   const {products} = productList
   //const { loading, error, products, page, pages } = productList
-  const storeList = useSelector((state) => state.storeList)
+  const storeList = useSelector((state) => state.allStores)
   const { stores } = storeList
   useEffect(() => {
-    dispatch(listStore(keyword, pageNumber));
-    dispatch(listProducts(keyword, pageNumber));
+    dispatch(storesAll());
+    dispatch(productsAll());
   }, [dispatch, keyword, pageNumber])
 
   return (

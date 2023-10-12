@@ -3,20 +3,29 @@ import Store from '../models/storeModel.js'
 import Product from '../models/productModel.js'
 
 
+// @desc    Get logged in user orders
+// @route   GET /api/orders/myorders
+// @access  Private
+
+const getMyStores = asyncHandler(async (req, res) => {
+  const stores = await Store.find({ user: req.user?._id })
+  res.json( stores )
+})
+
 // @desc    Fetch all products
 // @route   GET /api/products
 // @access  Public
 const getStores = asyncHandler(async (req, res) => {
-  const pageSize = 10
+  const pageSize = 12
   const page = Number(req.query.pageNumber) || 1
 
   const keyword = req.query.keyword
     ? {
-        name: {
-          $regex: req.query.keyword,
-          $options: 'i',
-        },
-      }
+      name: {
+        $regex: req.query.keyword,
+        $options: 'i',
+      },
+    }
     : {}
 
   const count = await Store.countDocuments({ ...keyword })
@@ -27,6 +36,14 @@ const getStores = asyncHandler(async (req, res) => {
   res.json({ stores, page, pages: Math.ceil(count / pageSize) })
 })
 
+// @desc    Fetch all products
+// @route   GET /api/products
+// @access  Public
+const getAll = asyncHandler(async (req, res) => {
+  const stores = await Store.find({})
+  res.json({ stores })
+})
+
 // @desc    Fetch single product
 // @route   GET /api/products/:id
 // @access  Public
@@ -35,7 +52,7 @@ const getStoreById = asyncHandler(async (req, res) => {
   let products = await Product.find({
     store_id: store._id,
   });
-  
+
   if (store) {
     res.json({ ...store._doc, products })
   } else {
@@ -69,8 +86,8 @@ const createStore = asyncHandler(async (req, res) => {
     image: '/images/sample.jpg',
     category: 'Sample category',
     location: {
-        lat:1.123,
-        lng:1.23
+      lat: 1.123,
+      lng: 1.23
 
     },
 
@@ -137,8 +154,8 @@ const createStoreReview = asyncHandler(async (req, res) => {
     store.numReviews = store.reviews.length
 
     store.rating =
-    store.reviews.reduce((acc, item) => item.rating + acc, 0) /
-    store.reviews.length
+      store.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      store.reviews.length
 
     await store.save()
     res.status(201).json({ message: 'Review added' })
@@ -158,7 +175,9 @@ const getTopStores = asyncHandler(async (req, res) => {
 })
 
 export {
+  getMyStores,
   getStores,
+  getAll,
   getStoreById,
   deleteStore,
   createStore,

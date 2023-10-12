@@ -75,6 +75,7 @@ const OrderListScreen = ({ history }) => {
             ))}
           </tbody>
         </Table>
+        
       )}
     </>
   )

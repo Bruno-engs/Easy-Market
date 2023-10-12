@@ -56,7 +56,7 @@ const ProfileScreen = ({ location, history }) => {
   return (
     <Row>
       <Col md={3}>
-        <h2>User Profile</h2>
+        <h2>Perfil Usuário</h2>
         {message && <Message variant='danger'>{message}</Message>}
         {}
         {success && <Message variant='success'>Profile Updated</Message>}
@@ -67,9 +67,9 @@ const ProfileScreen = ({ location, history }) => {
         ) : (
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='name'>
-              <Form.Label>Name</Form.Label>
+              <Form.Label>Nome</Form.Label>
               <Form.Control
-                type='name'
+                type='nome'
                 placeholder='Enter name'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -77,7 +77,7 @@ const ProfileScreen = ({ location, history }) => {
             </Form.Group>
 
             <Form.Group controlId='email'>
-              <Form.Label>Email Address</Form.Label>
+              <Form.Label>Email</Form.Label>
               <Form.Control
                 type='email'
                 placeholder='Enter email'
@@ -87,7 +87,7 @@ const ProfileScreen = ({ location, history }) => {
             </Form.Group>
 
             <Form.Group controlId='password'>
-              <Form.Label>Password</Form.Label>
+              <Form.Label>Senha</Form.Label>
               <Form.Control
                 type='password'
                 placeholder='Enter password'
@@ -97,7 +97,7 @@ const ProfileScreen = ({ location, history }) => {
             </Form.Group>
 
             <Form.Group controlId='confirmPassword'>
-              <Form.Label>Confirm Password</Form.Label>
+              <Form.Label>Confirmar Senha</Form.Label>
               <Form.Control
                 type='password'
                 placeholder='Confirm password'
@@ -113,7 +113,7 @@ const ProfileScreen = ({ location, history }) => {
         )}
       </Col>
       <Col md={9}>
-        <h2>My Orders</h2>
+        <h2>Meus pedidos</h2>
         {loadingOrders ? (
           <Loader />
         ) : errorOrders ? (

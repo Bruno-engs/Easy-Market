@@ -32,7 +32,7 @@ const CartScreen = ({ match, location, history }) => {
   return (
     <Row>
       <Col md={8}>
-        <h1>Carrinho de compras ({cartItems.reduce((acc, item) => acc + item.qty, 0)})</h1>
+        <h1>Meu Carrinho ({cartItems.reduce((acc, item) => acc + item.qty, 0)})</h1>
         {cartItems.length === 0 ? (
           <Message>
             Seu carrinho está vazio <Link to='/'>Comprar</Link>

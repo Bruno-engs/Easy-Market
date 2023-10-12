@@ -52,7 +52,7 @@ const Sidebar = ({ match, location }) => {
             position="right"
         >
             <div className="container-fluid h-100 pt-4 sidebar">
-                <h5>Minha Sacola({cartItems.reduce((acc, item) => acc + item.qty, 0)})</h5>
+                <h5>Meu Carrinho ({cartItems.reduce((acc, item) => acc + item.qty, 0)})</h5>
 
                 <div className="row products">
 
