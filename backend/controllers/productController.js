@@ -1,6 +1,16 @@
 import asyncHandler from 'express-async-handler'
 import Product from '../models/productModel.js'
 
+
+// @desc    Get logged in user orders
+// @route   GET /api/orders/myorders
+// @access  Private
+
+const getMyProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({ user: req.user?._id })
+  res.json( products )
+})
+
 // @desc    Fetch all products
 // @route   GET /api/products
 // @access  Public
@@ -160,6 +170,7 @@ const getTopProducts = asyncHandler(async (req, res) => {
 })
 
 export {
+  getMyProducts,
   getProducts,
   getProductById,
   deleteProduct,

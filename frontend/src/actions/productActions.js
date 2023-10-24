@@ -1,5 +1,8 @@
 import axios from 'axios'
 import {
+  PRODUCTS_LIST_MY_REQUEST,
+  PRODUCTS_LIST_MY_SUCCESS,
+  PRODUCTS_LIST_MY_FAIL,
   PRODUCTS_REQUEST,
   PRODUCTS_SUCCESS,
   PRODUCTS_FAIL,
@@ -52,6 +55,43 @@ export const productsAll = () => async (
   }
 }
 //////
+/////
+export const listMyProducts = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PRODUCTS_LIST_MY_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/products/myproducts`, config)
+
+    dispatch({
+      type: PRODUCTS_LIST_MY_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: PRODUCTS_LIST_MY_FAIL,
+      payload: message,
+    })
+  }
+}
 
 export const listProducts = (keyword = '', pageNumber = '') => async (
   dispatch

@@ -25,7 +25,6 @@ const productSchema = mongoose.Schema(
     },
     store_id: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
       ref: 'Store',
     },
     name: {

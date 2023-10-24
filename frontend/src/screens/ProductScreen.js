@@ -156,7 +156,7 @@ const ProductScreen = ({ history, match }) => {
           <Row>
             <Col md={6}>
               <h2>Avaliações: </h2>
-              {product.reviews.length === 0 && <Message>No Reviews</Message>}
+              {product.reviews.length === 0 && <Message>Sem Avaliações</Message>}
               <ListGroup variant='flush'>
                 {product.reviews.map((review) => (
                   <ListGroup.Item key={review._id}>
@@ -167,10 +167,10 @@ const ProductScreen = ({ history, match }) => {
                   </ListGroup.Item>
                 ))}
                 <ListGroup.Item>
-                  <h2>Write a Customer Review</h2>
+                  <h2>Avalie nosso produto:</h2>
                   {successProductReview && (
                     <Message variant='success'>
-                      Review submitted successfully
+                      Avaliação enviada com sucesso
                     </Message>
                   )}
                   {loadingProductReview && <Loader />}
@@ -213,7 +213,7 @@ const ProductScreen = ({ history, match }) => {
                     </Form>
                   ) : (
                     <Message>
-                      Please <Link to='/login'>sign in</Link> to write a review{' '}
+                      Porfavor faça o <Link to='/login'>login</Link> para avaliar o produto{' '}
                     </Message>
                   )}
                 </ListGroup.Item>

@@ -110,10 +110,10 @@ const StoreListScreen = ({ history, match }) => {
             </thead>
             <tbody className='text-center'>
               {stores?.map((stores) => (
-                <tr key={stores?._id}
-                onClick={() => history.push(`/admin/store/${stores._id}`)}
-                >
-                  <td>{stores?._id}</td>
+                <tr key={stores?._id}>
+                  <td
+                  onClick={() => history.push(`/admin/store/${stores._id}`)}
+                  >{stores?._id}</td>
                   <td>{stores?.name}</td>
                   <td>{stores?.category}</td>
                   <td>
