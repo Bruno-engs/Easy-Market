@@ -23,6 +23,10 @@ import {
   PRODUCT_UPDATE_SUCCESS,
   PRODUCT_UPDATE_FAIL,
   PRODUCT_UPDATE_RESET,
+  ORDERPRODUCT_UPDATE_SUCCESS,
+  ORDERPRODUCT_UPDATE_REQUEST,
+  ORDERPRODUCT_UPDATE_FAIL,
+  ORDERPRODUCT_UPDATE_RESET,
   PRODUCT_CREATE_REVIEW_REQUEST,
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAIL,
@@ -145,6 +149,21 @@ export const productUpdateReducer = (state = { product: {} }, action) => {
     case PRODUCT_UPDATE_FAIL:
       return { loading: false, error: action.payload }
     case PRODUCT_UPDATE_RESET:
+      return { product: {} }
+    default:
+      return state
+  }
+}
+
+export const orderproductUpdateReducer = (state = { product: {} }, action) => {
+  switch (action.type) {
+    case ORDERPRODUCT_UPDATE_REQUEST:
+      return { loading: true }
+    case ORDERPRODUCT_UPDATE_SUCCESS:
+      return { loading: false, success: true, product: action.payload }
+    case ORDERPRODUCT_UPDATE_FAIL:
+      return { loading: false, error: action.payload }
+    case ORDERPRODUCT_UPDATE_RESET:
       return { product: {} }
     default:
       return state

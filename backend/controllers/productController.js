@@ -118,6 +118,27 @@ const updateProduct = asyncHandler(async (req, res) => {
     throw new Error('Product not found')
   }
 })
+// @desc    Update a product
+// @route   PUT /api/products/:id
+// @access  Private/Admin
+const updateOrderProduct = asyncHandler(async (req, res) => {
+  const {
+    countInStock,
+  } = req.body
+
+  const product = await Product.findById(req.params.id)
+
+  if (product) {
+
+    product.countInStock = countInStock
+
+    const updateOrderProduct = await product.save()
+    res.json(updateOrderProduct)
+  } else {
+    res.status(404)
+    throw new Error('Product not found')
+  }
+})
 
 // @desc    Create new review
 // @route   POST /api/products/:id/reviews
@@ -176,6 +197,7 @@ export {
   deleteProduct,
   createProduct,
   updateProduct,
+  updateOrderProduct,
   createProductReview,
   getTopProducts,
 }

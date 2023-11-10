@@ -15,13 +15,15 @@ const StoreEditScreen = ({ match, history }) => {
 
   const [name, setName] = useState('')
   const [image, setImage] = useState('')
+  const [lat, setLat] = useState('')
+  const [lng, setLng] = useState('')
   const [category, setCategory] = useState('')
   const [uploading, setUploading] = useState(false)
 
   const dispatch = useDispatch()
 
   const storeDetails = useSelector((state) => state.storeDetails)
-  const { loading, error, stores } = storeDetails
+  const { loading, error, store } = storeDetails
 
   const storeUpdate = useSelector((state) => state.storeUpdate)
   const {
@@ -35,15 +37,17 @@ const StoreEditScreen = ({ match, history }) => {
       dispatch({ type: STORE_UPDATE_RESET })
       history.push('/admin/storelist')
     } else {
-      if (!stores?.name || stores?._id !== storeId) {
+      if (!store?.name || store?._id !== storeId) {
         dispatch(listStoreDetails(storeId))
       } else {
-        setName(stores?.name)
-        setImage(stores?.image)
-        setCategory(stores?.category)
+        setName(store?.name)
+        setImage(store?.image)
+        setLat(store?.location.lat)
+        setLng(store?.location.lng)
+        setCategory(store?.category)
       }
     }
-  }, [dispatch, history, storeId, stores, successUpdate])
+  }, [dispatch, history, storeId, store, successUpdate])
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0]
@@ -75,6 +79,7 @@ const StoreEditScreen = ({ match, history }) => {
         _id: storeId,
         name,
         image,
+        location:{lat,lng},
         category,
       })
     )
@@ -122,7 +127,24 @@ const StoreEditScreen = ({ match, history }) => {
               ></Form.File>
               {uploading && <Loader />}
             </Form.Group>
-
+            <Form.Group controlId='lat'>
+              <Form.Label>Latitude</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Insira a latitude'
+                value={lat}
+                onChange={(e) => setLat(e.target.value)}
+              ></Form.Control>
+            </Form.Group>            
+            <Form.Group controlId='lng'>
+              <Form.Label>Longitude</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Insira a longitude'
+                value={lng}
+                onChange={(e) => setLng(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
             <Form.Group controlId='categoria'>
               <Form.Label>Category</Form.Label>

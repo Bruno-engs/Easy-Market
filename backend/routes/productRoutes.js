@@ -6,6 +6,7 @@ import {
   deleteProduct,
   createProduct,
   updateProduct,
+  updateOrderProduct,
   createProductReview,
   getTopProducts,
   getMyProducts
@@ -20,6 +21,9 @@ router
   .route('/:id')
   .get(getProductById)
   .delete(protect, admin, deleteProduct)
-  .put(protect, admin, updateProduct)
+  .put(protect, admin, updateProduct, updateOrderProduct)
+  router
+  .route('/order/:id')
+  .put(protect, admin, updateOrderProduct)
 
 export default router

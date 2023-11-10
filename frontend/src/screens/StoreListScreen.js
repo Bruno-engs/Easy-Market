@@ -78,7 +78,6 @@ const StoreListScreen = ({ history, match }) => {
   const createStoreHandler = () => {
 
     dispatch(createStore())
-    console.log(createdStore)
   }
 
   return (

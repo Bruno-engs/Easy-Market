@@ -15,6 +15,10 @@ import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
 } from '../constants/orderConstants'
+import { listProductDetails, updateOrderProduct, /*updateProduct */ } from '../actions/productActions'
+import { ORDERPRODUCT_UPDATE_RESET } from '../constants/productConstants'
+
+
 
 const OrderScreen = ({ match, history }) => {
   const orderId = match.params.id
@@ -32,6 +36,11 @@ const OrderScreen = ({ match, history }) => {
   const orderDeliver = useSelector((state) => state.orderDeliver)
   const { loading: loadingDeliver, success: successDeliver } = orderDeliver
 
+  const productDetails = useSelector((state) => state.productDetails)
+  const { product } = productDetails
+
+  const [countInStock] = useState(product?.countInStock)
+
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
@@ -42,14 +51,45 @@ const OrderScreen = ({ match, history }) => {
     }
 
     order.itemsPrice = addDecimals(
-      order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+      order?.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
     )
   }
+
+/*
+  const submitHandler = () => {
+
+    (order?.orderItems.map((item) => (
+      dispatch(listProductDetails(item?.product)),
+      dispatch(
+        updateOrderProduct({
+          _id: item?.product,
+          countInStock: countInStock - item?.qty
+        })
+      ),
+      dispatch({ type: ORDERPRODUCT_UPDATE_RESET })
+    )))
+
+  }*/
 
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
     }
+/*
+    const updateProductOrder = () => {
+
+      (order?.orderItems.map((item) => (
+        dispatch(listProductDetails(item?.product)),
+        dispatch(
+          updateOrderProduct({
+            _id: item?.product,
+            countInStock: countInStock - item?.qty
+          })
+        ),
+        dispatch({ type: ORDERPRODUCT_UPDATE_RESET })
+      )))
+  
+    }*/
 
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get('/api/config/paypal')
@@ -66,6 +106,20 @@ const OrderScreen = ({ match, history }) => {
     if (!order || successPay || successDeliver || order._id !== orderId) {
       dispatch({ type: ORDER_PAY_RESET })
       dispatch({ type: ORDER_DELIVER_RESET })
+      //updateProductOrder()
+      ///
+      order?.orderItems.map((item) => (
+        // eslint-disable-next-line
+        dispatch(listProductDetails(item?.product)),
+        dispatch(
+          updateOrderProduct({
+            _id: item?.product,
+            countInStock: countInStock - item?.qty
+          })
+        ),
+        dispatch({ type: ORDERPRODUCT_UPDATE_RESET })
+      ))
+      ///
       dispatch(getOrderDetails(orderId))
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -75,6 +129,7 @@ const OrderScreen = ({ match, history }) => {
       }
     }
   }, [dispatch,
+    countInStock,
     history,
     orderId,
     successPay,
@@ -90,6 +145,7 @@ const OrderScreen = ({ match, history }) => {
   const deliverHandler = () => {
     dispatch(deliverOrder(order))
   }
+
 
   return loading ? (
     <Loader />
@@ -140,12 +196,12 @@ const OrderScreen = ({ match, history }) => {
 
             <ListGroup.Item>
               <h2>Produtos</h2>
-              {order.orderItems.length === 0 ? (
+              {order?.orderItems.length === 0 ? (
                 <Message>Order is empty</Message>
               ) : (
                 <ListGroup variant='flush'>
-                  {order.orderItems.map((item, index) => (
-                    <ListGroup.Item key={index}>
+                  {order?.orderItems.map((item, i) => (
+                    <ListGroup.Item key={i}>
                       <Row>
                         <Col md={1}>
                           <Image
@@ -155,6 +211,11 @@ const OrderScreen = ({ match, history }) => {
                             rounded
                           />
                         </Col>
+                      
+                        <Col>
+                          {item.product}
+                        </Col>
+
                         <Col>
                           <Link to={`/product/${item.product}`}>
                             {item.name}
@@ -208,7 +269,7 @@ const OrderScreen = ({ match, history }) => {
                     <Loader />
                   ) : (
                     <PayPalButton
-                    currency_code="BRL"
+                      currency_code="BRL"
                       amount={
                         order.totalPrice}
                       onSuccess={successPaymentHandler}
@@ -229,6 +290,14 @@ const OrderScreen = ({ match, history }) => {
                     >
                       Despachar
                     </Button>
+                          {/* <Button
+                      type='button'
+                      className='btn btn-block'
+                      onClick={submitHandler}
+                    >
+                      atualizar
+                    </Button>*/}
+
                   </ListGroup.Item>
                 )}
             </ListGroup>
