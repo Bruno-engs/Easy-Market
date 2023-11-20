@@ -30,6 +30,7 @@ import {
   PRODUCT_TOP_REQUEST,
   PRODUCT_TOP_SUCCESS,
   PRODUCT_TOP_FAIL,
+  ORDERPRODUCT_UPDATE_RESET,
 } from '../constants/productConstants'
 import { logout } from './userActions'
 //////
@@ -141,6 +142,40 @@ export const listProductDetails = (id) => async (dispatch) => {
     })
   }
 }
+
+export const updateQtdProduct= (id, qty) => async (dispatch) => {
+  try {
+    dispatch({ type: PRODUCT_DETAILS_REQUEST })
+
+    const { data } = await axios.get(`/api/products/${id}`)
+
+    dispatch({
+      type: PRODUCT_DETAILS_SUCCESS,
+      payload: data,
+    })
+
+    if (data?.countInStock) {
+      dispatch(
+        updateOrderProduct({
+          _id: id,
+          countInStock: data.countInStock - qty,
+        })
+      );
+    }
+
+    dispatch({ type: ORDERPRODUCT_UPDATE_RESET });
+
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
 
 export const deleteProduct = (id) => async (dispatch, getState) => {
   try {
@@ -281,6 +316,7 @@ export const updateOrderProduct = (product) => async (dispatch, getState) => {
       product,
       config
     )
+    
 
     dispatch({
       type: ORDERPRODUCT_UPDATE_SUCCESS,

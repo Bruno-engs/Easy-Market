@@ -15,8 +15,7 @@ import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
 } from '../constants/orderConstants'
-import { listProductDetails, updateOrderProduct, /*updateProduct */ } from '../actions/productActions'
-import { ORDERPRODUCT_UPDATE_RESET } from '../constants/productConstants'
+import { updateQtdProduct } from '../actions/productActions'
 
 
 
@@ -36,11 +35,6 @@ const OrderScreen = ({ match, history }) => {
   const orderDeliver = useSelector((state) => state.orderDeliver)
   const { loading: loadingDeliver, success: successDeliver } = orderDeliver
 
-  const productDetails = useSelector((state) => state.productDetails)
-  const { product } = productDetails
-
-  const [countInStock] = useState(product?.countInStock)
-
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
@@ -55,41 +49,21 @@ const OrderScreen = ({ match, history }) => {
     )
   }
 
-/*
-  const submitHandler = () => {
 
-    (order?.orderItems.map((item) => (
-      dispatch(listProductDetails(item?.product)),
-      dispatch(
-        updateOrderProduct({
-          _id: item?.product,
-          countInStock: countInStock - item?.qty
-        })
-      ),
-      dispatch({ type: ORDERPRODUCT_UPDATE_RESET })
-    )))
-
-  }*/
+  const submitHandler = async () => {
+    if (order?.orderItems) {
+      for (const item of order.orderItems) {
+        if (item?.product && item?.qty) {
+          await dispatch(updateQtdProduct(item?.product, item?.qty));
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
     }
-/*
-    const updateProductOrder = () => {
-
-      (order?.orderItems.map((item) => (
-        dispatch(listProductDetails(item?.product)),
-        dispatch(
-          updateOrderProduct({
-            _id: item?.product,
-            countInStock: countInStock - item?.qty
-          })
-        ),
-        dispatch({ type: ORDERPRODUCT_UPDATE_RESET })
-      )))
-  
-    }*/
 
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get('/api/config/paypal')
@@ -106,20 +80,6 @@ const OrderScreen = ({ match, history }) => {
     if (!order || successPay || successDeliver || order._id !== orderId) {
       dispatch({ type: ORDER_PAY_RESET })
       dispatch({ type: ORDER_DELIVER_RESET })
-      //updateProductOrder()
-      ///
-      order?.orderItems.map((item) => (
-        // eslint-disable-next-line
-        dispatch(listProductDetails(item?.product)),
-        dispatch(
-          updateOrderProduct({
-            _id: item?.product,
-            countInStock: countInStock - item?.qty
-          })
-        ),
-        dispatch({ type: ORDERPRODUCT_UPDATE_RESET })
-      ))
-      ///
       dispatch(getOrderDetails(orderId))
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -129,7 +89,6 @@ const OrderScreen = ({ match, history }) => {
       }
     }
   }, [dispatch,
-    countInStock,
     history,
     orderId,
     successPay,
@@ -143,6 +102,7 @@ const OrderScreen = ({ match, history }) => {
   }
 
   const deliverHandler = () => {
+    submitHandler();
     dispatch(deliverOrder(order))
   }
 
@@ -211,7 +171,7 @@ const OrderScreen = ({ match, history }) => {
                             rounded
                           />
                         </Col>
-                      
+
                         <Col>
                           {item.product}
                         </Col>
@@ -290,7 +250,8 @@ const OrderScreen = ({ match, history }) => {
                     >
                       Despachar
                     </Button>
-                          {/* <Button
+                    {/* <Button
+                           <Button
                       type='button'
                       className='btn btn-block'
                       onClick={submitHandler}

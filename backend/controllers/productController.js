@@ -125,7 +125,7 @@ const updateOrderProduct = asyncHandler(async (req, res) => {
   const {
     countInStock,
   } = req.body
-
+  console.log(req.body);
   const product = await Product.findById(req.params.id)
 
   if (product) {
@@ -134,6 +134,7 @@ const updateOrderProduct = asyncHandler(async (req, res) => {
 
     const updateOrderProduct = await product.save()
     res.json(updateOrderProduct)
+
   } else {
     res.status(404)
     throw new Error('Product not found')
