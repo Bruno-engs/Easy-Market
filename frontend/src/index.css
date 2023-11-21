@@ -333,6 +333,7 @@ b.thicker {
   border-radius: 5px;
   padding: 0px;
   background-color: transparent;
+
   
 }.edt{
   font-size: 15px;
@@ -341,6 +342,13 @@ b.thicker {
   padding: 0px;
   background-color: transparent;
   
+}
+.hidden-btn {
+  font-size: 15px;
+  color: #28a745;
+  border-radius: 5px;
+  padding: 0px;
+  background-color: transparent;
 }
 
 .btnn{

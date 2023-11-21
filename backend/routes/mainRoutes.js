@@ -24,12 +24,13 @@ router.get('/mystores/:id', async (req, res) => {
 
 router.get('/products', async (req, res) => {
   try {
-    const products = await Product.find({})
+    const products = await Product.find({ isHidden: false })
     res.json({products})
   } catch (err) {
     res.json({ error: true, message: err.message });
   }
 });
+
 
 
 

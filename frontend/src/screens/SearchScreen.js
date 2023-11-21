@@ -24,7 +24,7 @@ const SearchScreen = ({ match }) => {
 
     }, [dispatch, keyword, pageNumber, match])
 
-
+    console.log(listProducts(keyword, pageNumber))
     return (
         <div className="h-100">
             <div className="container">

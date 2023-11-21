@@ -31,6 +31,9 @@ import {
   PRODUCT_TOP_SUCCESS,
   PRODUCT_TOP_FAIL,
   ORDERPRODUCT_UPDATE_RESET,
+  PRODUCT_UPDATE_HIDDEN_REQUEST,
+  PRODUCT_UPDATE_HIDDEN_SUCCESS,
+  PRODUCT_UPDATE_HIDDEN_FAIL,
 } from '../constants/productConstants'
 import { logout } from './userActions'
 //////
@@ -175,6 +178,32 @@ export const updateQtdProduct= (id, qty) => async (dispatch) => {
     })
   }
 }
+// productActions.js
+export const updateProductHidden = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: PRODUCT_UPDATE_HIDDEN_REQUEST });
+
+    const { userLogin: { userInfo } } = getState();
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(`/api/products/${id}`, { isHidden: false }, config);
+
+    dispatch({ type: PRODUCT_UPDATE_HIDDEN_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_UPDATE_HIDDEN_FAIL,
+      payload: error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+};
+
 
 
 export const deleteProduct = (id) => async (dispatch, getState) => {

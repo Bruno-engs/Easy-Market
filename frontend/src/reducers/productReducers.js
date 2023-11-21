@@ -34,6 +34,10 @@ import {
   PRODUCT_TOP_REQUEST,
   PRODUCT_TOP_SUCCESS,
   PRODUCT_TOP_FAIL,
+  PRODUCT_UPDATE_HIDDEN_REQUEST,
+  PRODUCT_UPDATE_HIDDEN_SUCCESS,
+  PRODUCT_UPDATE_HIDDEN_FAIL,
+  PRODUCT_UPDATE_HIDDEN_RESET,
 } from '../constants/productConstants'
 /////
 
@@ -154,6 +158,22 @@ export const productUpdateReducer = (state = { product: {} }, action) => {
       return state
   }
 }
+// productReducers.js
+export const productUpdateHiddenReducer = (state = {}, action) => {
+  switch (action.type) {
+    case PRODUCT_UPDATE_HIDDEN_REQUEST:
+      return { loading: true };
+    case PRODUCT_UPDATE_HIDDEN_SUCCESS:
+      return { loading: false, success: true, product: action.payload };
+    case PRODUCT_UPDATE_HIDDEN_FAIL:
+      return { loading: false, error: action.payload };
+    case PRODUCT_UPDATE_HIDDEN_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
 
 export const orderproductUpdateReducer = (state = { product: {} }, action) => {
   switch (action.type) {

@@ -26,8 +26,9 @@ const getProducts = asyncHandler(async (req, res) => {
           $regex: req.query.keyword,
           $options: 'i',
         },
+        isHidden: false, // Altere para isHidden
       }
-    : {}
+    : { isHidden: false } // Altere para isHidden
 
   const count = await Product.countDocuments({ ...keyword })
   const products = await Product.find({ ...keyword })
@@ -36,6 +37,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
   res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
+
 
 // @desc    Fetch single product
 // @route   GET /api/products/:id
@@ -121,28 +123,18 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const {
-    name,
-    store_id,
-    price,
-    description,
-    image,
-    brand,
-    category,
-    countInStock,
-  } = req.body
-
   const product = await Product.findById(req.params.id)
 
   if (product) {
-    product.name = name
-    product.store_id = store_id
-    product.price = price
-    product.description = description
-    product.image = image
-    product.brand = brand
-    product.category = category
-    product.countInStock = countInStock
+    if (req.body.name) product.name = req.body.name;
+    if (req.body.store_id) product.store_id = req.body.store_id;
+    if (req.body.price) product.price = req.body.price;
+    if (req.body.description) product.description = req.body.description;
+    if (req.body.image) product.image = req.body.image;
+    if (req.body.brand) product.brand = req.body.brand;
+    if (req.body.category) product.category = req.body.category;
+    if (req.body.countInStock) product.countInStock = req.body.countInStock;
+    if (req.body.isHidden !== undefined) product.isHidden = req.body.isHidden;
 
     const updatedProduct = await product.save()
     res.json(updatedProduct)

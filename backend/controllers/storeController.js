@@ -51,6 +51,7 @@ const getStoreById = asyncHandler(async (req, res) => {
   const store = await Store.findById(req.params.id)
   let products = await Product.find({
     store_id: store._id,
+    isHidden: false,
   });
 
   if (store) {
