@@ -63,11 +63,27 @@ const ProductListScreen = ({ history, match }) => {
     pageNumber,
   ])
 
-  const deleteHandler = (id) => {
-    if (window.confirm('Are you sure')) {
-      dispatch(deleteProduct(id))
+  const deleteHandler = async (id) => {
+    // Solicitar ao back-end para verificar se o produto tem pedidos pendentes
+    const response = await fetch(`/api/products/${id}/orders`);
+    const data = await response.json();
+  
+    let confirmationMessage;
+    if (data.hasOrders) {
+      if (data.hasDeliveredOrders) {
+        confirmationMessage = 'Este produto tem pedidos pendentes. Se você continuar, o produto será marcado como invisível. Você tem certeza dessa ação?';
+      } else {
+        confirmationMessage = 'Este produto será excluído permanentemente. Você tem certeza dessa ação?';
+      }
+    } else {
+      confirmationMessage = 'Este produto será excluído permanentemente. Você tem certeza dessa ação?';
+    }
+  
+    if (window.confirm(confirmationMessage)) {
+      dispatch(deleteProduct(id));
     }
   }
+  
 
   const createProductHandler = () => {
     dispatch(createProduct())

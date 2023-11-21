@@ -1,8 +1,9 @@
 import express from 'express'
-const router = express.Router();
 import Store from '../models/storeModel.js'
 import Product from '../models/productModel.js'
+import Order from '../models/orderModel.js';
 
+const router = express.Router();
 
 router.get('/stores', async (req, res) => {
   try {
@@ -29,6 +30,8 @@ router.get('/products', async (req, res) => {
     res.json({ error: true, message: err.message });
   }
 });
+
+
 
 
 export default router

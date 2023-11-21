@@ -9,7 +9,8 @@ import {
   updateOrderProduct,
   createProductReview,
   getTopProducts,
-  getMyProducts
+  getMyProducts,
+  checkProductOrders 
 } from '../controllers/productController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
@@ -25,5 +26,6 @@ router
   router
   .route('/order/:id')
   .put(protect, admin, updateOrderProduct)
+  router.get('/:id/orders', checkProductOrders)
 
 export default router

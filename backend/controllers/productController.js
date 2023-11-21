@@ -1,5 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import Product from '../models/productModel.js'
+import Order from '../models/orderModel.js'
+
 
 
 // @desc    Get logged in user orders
@@ -49,6 +51,22 @@ const getProductById = asyncHandler(async (req, res) => {
   }
 })
 
+
+const checkProductOrders = asyncHandler(async (req, res) => {
+  const allOrders = await Order.find({ "orderItems.product": req.params.id });
+  const deliveredOrders = await Order.find({ 
+    "orderItems.product": req.params.id,
+    "isPaid": true,
+    "isDelivered": false
+  });
+
+  res.json({ 
+    hasOrders: allOrders.length > 0,
+    hasDeliveredOrders: deliveredOrders.length > 0 
+  });
+})
+
+
 // @desc    Delete a product
 // @route   DELETE /api/products/:id
 // @access  Private/Admin
@@ -56,13 +74,28 @@ const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
 
   if (product) {
-    await product.remove()
-    res.json({ message: 'Product removed' })
+    // Procurar por pedidos com este produto que ainda não foram enviados
+    const pendingOrders = await Order.find({ 
+      "orderItems.product": req.params.id,
+      "isDelivered": false
+    });
+
+    if (pendingOrders.length > 0) {
+      // Se houver pedidos pendentes, esconder o produto
+      product.isHidden = true;
+      await product.save();
+      res.json({ message: 'Product hidden' })
+    } else {
+      // Se não houver pedidos pendentes, deletar o produto
+      await product.remove()
+      res.json({ message: 'Product removed' })
+    }
   } else {
     res.status(404)
     throw new Error('Product not found')
   }
 })
+
 
 // @desc    Create a product
 // @route   POST /api/products
@@ -78,8 +111,8 @@ const createProduct = asyncHandler(async (req, res) => {
     countInStock: 0,
     numReviews: 0,
     description: 'Sample description',
+    isHidden: false
   })
-
   const createdProduct = await product.save()
   res.status(201).json(createdProduct)
 })
@@ -201,4 +234,5 @@ export {
   updateOrderProduct,
   createProductReview,
   getTopProducts,
+  checkProductOrders, 
 }
