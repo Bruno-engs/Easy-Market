@@ -27,6 +27,10 @@ import {
   STORE_TOP_REQUEST,
   STORE_TOP_SUCCESS,
   STORE_TOP_FAIL,
+  STORE_UPDATE_HIDDEN_REQUEST,
+  STORE_UPDATE_HIDDEN_SUCCESS,
+  STORE_UPDATE_HIDDEN_FAIL,
+  SELECT_STORE,
 } from '../constants/storeConstants'
 import { logout } from './userActions'
 
@@ -179,6 +183,32 @@ export const deleteStore = (id) => async (dispatch, getState) => {
   }
 }
 
+export const updateStoreHidden = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: STORE_UPDATE_HIDDEN_REQUEST });
+
+    const { userLogin: { userInfo } } = getState();
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(`/api/store/${id}`, { isHidden: false }, config);
+
+    dispatch({ type: STORE_UPDATE_HIDDEN_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: STORE_UPDATE_HIDDEN_FAIL,
+      payload: error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+};
+
+
 export const createStore = () => async (dispatch, getState) => {
   try {
     dispatch({
@@ -319,3 +349,10 @@ export const listTopStore = () => async (dispatch) => {
     })
   }
 }
+// actions.js
+
+
+export const selectStore = (store) => ({
+  type: SELECT_STORE,
+  payload: store,
+});

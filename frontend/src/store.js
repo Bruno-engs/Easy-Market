@@ -11,6 +11,7 @@ import {
   storeReviewCreateReducer,
   storeTopRatedReducer,
   storesListMyReducer,
+  storeUpdateHiddenReducer,
 } from './reducers/storeReducers'
 import {
   productsReducer,
@@ -63,6 +64,7 @@ const reducer = combineReducers({
   storeDelete: storeDeleteReducer,
   storeCreate: storeCreateReducer,
   storeUpdate: storeUpdateReducer,
+  storeUpdateHidden: storeUpdateHiddenReducer,
   storeReviewCreate: storeReviewCreateReducer,
   storeTopRated: storeTopRatedReducer,
   cart: cartReducer,

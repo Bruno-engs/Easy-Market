@@ -59,4 +59,3 @@ const HomeScreen = ({ match }) => {
 }
 
 export default HomeScreen
-/**/

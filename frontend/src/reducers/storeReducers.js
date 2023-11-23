@@ -30,6 +30,11 @@ import {
   STORE_TOP_REQUEST,
   STORE_TOP_SUCCESS,
   STORE_TOP_FAIL,
+  STORE_UPDATE_HIDDEN_REQUEST,
+  STORE_UPDATE_HIDDEN_SUCCESS,
+  STORE_UPDATE_HIDDEN_FAIL,
+  STORE_UPDATE_HIDDEN_RESET,
+  SELECT_STORE,
 } from '../constants/storeConstants'
 
 /////
@@ -108,6 +113,21 @@ export const storeDetailsReducer = (
       return state
   }
 }
+export const storeUpdateHiddenReducer = (state = {}, action) => {
+  switch (action.type) {
+    case STORE_UPDATE_HIDDEN_REQUEST:
+      return { loading: true };
+    case STORE_UPDATE_HIDDEN_SUCCESS:
+      return { loading: false, success: true, store: action.payload };
+    case STORE_UPDATE_HIDDEN_FAIL:
+      return { loading: false, error: action.payload };
+    case STORE_UPDATE_HIDDEN_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
 
 export const storeDeleteReducer = (state = {}, action) => {
   switch (action.type) {
@@ -179,3 +199,22 @@ export const storeTopRatedReducer = (state = { store: [] }, action) => {
       return state
   }
 }
+
+// reducers.js
+
+
+const initialState = {
+  selectedStore: null,
+};
+
+export const appReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case SELECT_STORE:
+      return {
+        ...state,
+        selectedStore: action.payload,
+      };
+    default:
+      return state;
+  }
+};

@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import Store from '../models/storeModel.js'
 import Product from '../models/productModel.js'
+import Order from '../models/orderModel.js'
 
 
 // @desc    Get logged in user orders
@@ -62,6 +63,34 @@ const getStoreById = asyncHandler(async (req, res) => {
   }
 })
 
+const checkStoreOrders = asyncHandler(async (req, res) => {
+  const store = await Store.findById(req.params.id);
+  const products = await Product.find({ store_id: req.params.id });
+
+  let hasPendingOrders = false;
+
+  for (let product of products) {
+    const pendingOrders = await Order.find({ 
+      "orderItems.product": product._id,
+      "isPaid": true,
+      "isDelivered": false
+    });
+
+    if (pendingOrders.length > 0) {
+      hasPendingOrders = true;
+      break;
+    }
+  }
+
+  res.json({ 
+    hasProducts: products.length > 0,
+    hasPendingOrders 
+  });
+});
+
+
+
+
 // @desc    Delete a product
 // @route   DELETE /api/products/:id
 // @access  Private/Admin
@@ -69,13 +98,54 @@ const deleteStore = asyncHandler(async (req, res) => {
   const store = await Store.findById(req.params.id)
 
   if (store) {
-    await store.remove()
-    res.json({ message: 'store removed' })
+    // Procurar por produtos com esta loja
+    const products = await Product.find({ store_id: req.params.id });
+
+    if (products.length > 0) {
+      // Se houver produtos, verificar se algum deles tem pedidos pendentes
+      let hasPendingOrders = false;
+      for (let product of products) {
+        const pendingOrders = await Order.find({ 
+          "orderItems.product": product._id,
+          "isPaid": true,
+          "isDelivered": false
+        });
+
+        if (pendingOrders.length > 0) {
+          hasPendingOrders = true;
+          break;
+        }
+      }
+
+      if (hasPendingOrders) {
+        // Se houver pedidos pendentes, esconder a loja e todos os seus produtos
+        store.isHidden = true;
+        await store.save();
+        for (let product of products) {
+          product.isHidden = true;
+          await product.save();
+        }
+        res.json({ message: 'Store and all its products hidden due to pending orders' })
+      } else {
+        // Se não houver pedidos pendentes, deletar a loja e todos os seus produtos
+        await Product.deleteMany({ store_id: req.params.id });
+        await store.remove()
+        res.json({ message: 'Store and all its products removed' })
+      }
+    } else {
+      // Se a loja não tiver produtos, deletar a loja
+      await store.remove()
+      res.json({ message: 'Store removed' })
+    }
   } else {
     res.status(404)
-    throw new Error('store not found')
+    throw new Error('Store not found')
   }
 })
+
+
+
+
 
 // @desc    Create a product
 // @route   POST /api/products
@@ -102,28 +172,24 @@ const createStore = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateStore = asyncHandler(async (req, res) => {
-  const {
-    name,
-    image,
-    category,
-    location,
-  } = req.body
-
   const store = await Store.findById(req.params.id)
 
   if (store) {
-    store.name = name
-    store.image = image
-    store.category = category
-    store.location = location
-
+    if (req.body.name ) store.name = req.body.name;
+    if (req.body.image ) store.image = req.body.image;
+    if (req.body.category ) store.category = req.body.category;
+    if (req.body.location ) store.location = req.body.location;
+    if (req.body.isHidden !== undefined) {
+      store.set({ isHidden: req.body.isHidden });
+    }
     const updatedStore = await store.save()
     res.json(updatedStore)
   } else {
     res.status(404)
-    throw new Error('store not found')
+    throw new Error('Store not found')
   }
 })
+
 
 // @desc    Create new review
 // @route   POST /api/products/:id/reviews
@@ -185,4 +251,5 @@ export {
   updateStore,
   createStoreReview,
   getTopStores,
+  checkStoreOrders,
 }

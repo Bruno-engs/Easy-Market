@@ -9,8 +9,9 @@ import {
   deleteStore,
   createStore,
   listMyStores,
+  updateStoreHidden,
 } from '../actions/storeActions'
-import { STORE_CREATE_RESET } from '../constants/storeConstants'
+import { STORE_CREATE_RESET, STORE_UPDATE_HIDDEN_RESET } from '../constants/storeConstants'
 //import Paginate2 from '../components/Paginate2'
 
 const StoreListScreen = ({ history, match }) => {
@@ -43,8 +44,8 @@ const StoreListScreen = ({ history, match }) => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
-  
-
+  const storeUpdateHidden = useSelector((state) => state.storeUpdateHidden);
+  const { success: successUpdateHidden } = storeUpdateHidden;
 
   useEffect(() => {
     dispatch({ type: STORE_CREATE_RESET })
@@ -59,21 +60,46 @@ const StoreListScreen = ({ history, match }) => {
       dispatch(listMyStores('', pageNumber))
       //dispatch(listStore('', pageNumber))
     }
+    if (successUpdateHidden) {
+      dispatch({ type: STORE_UPDATE_HIDDEN_RESET });
+    }
   }, [
     dispatch,
     history,
     userInfo,
     successDelete,
     successCreate,
+    successUpdateHidden,
     createdStore,
     pageNumber,
   ])
 
-  const deleteHandler = (id) => {
-    if (window.confirm('Are you sure')) {
-      dispatch(deleteStore(id))
+  const deleteHandler = async (id) => {
+    // Solicitar ao back-end para verificar se a loja tem produtos com pedidos pendentes
+    const response = await fetch(`/api/store/${id}/products/orders`);
+    const data = await response.json();
+  
+    let confirmationMessage;
+    if (data.hasProducts) {
+      if (data.hasPendingOrders) {
+        confirmationMessage = 'Esta loja tem produtos com pedidos pendentes. Se você continuar, todos os produtos serão marcados como invisíveis. Você tem certeza dessa ação?';
+      } else {
+        confirmationMessage = 'Esta loja e todos os seus produtos serão excluídos permanentemente. Você tem certeza dessa ação?';
+      }
+    } else {
+      confirmationMessage = 'Esta loja será excluída permanentemente. Você tem certeza dessa ação?';
+    }
+  
+    if (window.confirm(confirmationMessage)) {
+      dispatch(deleteStore(id));
     }
   }
+  
+  const isVisible = (id) => {
+    if (window.confirm('Você tem certeza que deseja alterar a visibilidade desta loja?')) {
+      dispatch(updateStoreHidden(id));
+    }
+  };
 
   const createStoreHandler = () => {
 
@@ -105,6 +131,7 @@ const StoreListScreen = ({ history, match }) => {
                 <th>LOJA</th>
                 <th>CATEGORIA</th>
                 <th>AÇÕES</th>
+                <th>OCULTO</th>
               </tr>
             </thead>
             <tbody className='text-center'>
@@ -129,6 +156,13 @@ const StoreListScreen = ({ history, match }) => {
                       <i className='fas fa-trash'></i>
                     </Button>
                   </td>
+                  <td>
+                  {stores.isHidden && (
+                    <Button variant='light' className='hidden-btn' onClick={() => isVisible(stores._id)}>
+                      <i className='fas fa-eye-slash'></i>
+                    </Button>
+                  )}
+                </td>
                 </tr>
               ))}
             </tbody>

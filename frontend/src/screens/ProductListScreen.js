@@ -41,8 +41,6 @@ const ProductListScreen = ({ history, match }) => {
   const productUpdateHidden = useSelector((state) => state.productUpdateHidden);
   const { success: successUpdateHidden } = productUpdateHidden;
 
-
-
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
@@ -97,6 +95,11 @@ const ProductListScreen = ({ history, match }) => {
     }
   }
 
+  const isVisible = (id) => {
+    if (window.confirm('Você tem certeza que deseja alterar a visibilidade deste produto?')) {
+      dispatch(updateProductHidden(id));
+    }
+  };
 
 
   const createProductHandler = () => {
@@ -160,15 +163,7 @@ const ProductListScreen = ({ history, match }) => {
                 </td>
                 <td>
                   {product.isHidden && (
-                    <Button
-                      variant='light'
-                      className='hidden-btn'
-                      onClick={() => {
-                        if (window.confirm('Você tem certeza que deseja mostrar este produto?')) {
-                          dispatch(updateProductHidden(product._id));
-                        }
-                      }}
-                    >
+                    <Button variant='light' className='hidden-btn' onClick={() => isVisible(product._id)}>
                       <i className='fas fa-eye-slash'></i>
                     </Button>
                   )}

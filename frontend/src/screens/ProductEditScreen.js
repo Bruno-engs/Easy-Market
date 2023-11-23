@@ -60,7 +60,10 @@ const ProductEditScreen = ({ match, history }) => {
     dispatch(listMyStores())
   }, [dispatch, history, productId, product, successUpdate])
 
+  
+
   const uploadFileHandler = async (e) => {
+    console.log(e.target.files[0])
     const file = e.target.files[0]
     const formData = new FormData()
     formData.append('image', file)
@@ -74,6 +77,7 @@ const ProductEditScreen = ({ match, history }) => {
       }
 
       const { data } = await axios.post('/api/upload', formData, config)
+
 
       setImage(data)
       setUploading(false)

@@ -10,6 +10,7 @@ import {
   createStoreReview,
   getTopStores,
   getMyStores,
+  checkStoreOrders,
 } from '../controllers/storeController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
@@ -22,5 +23,6 @@ router
   .get(getStoreById)
   .delete(protect, admin, deleteStore)
   .put(protect, admin, updateStore)
+router.route('/:id/products/orders').get( checkStoreOrders);
 
 export default router

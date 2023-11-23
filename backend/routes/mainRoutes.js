@@ -7,12 +7,13 @@ const router = express.Router();
 
 router.get('/stores', async (req, res) => {
   try {
-    const stores = await Store.find({})
+    const stores = await Store.find({ isHidden: false })
     res.json({stores})
   } catch (err) {
     res.json({ error: true, message: err.message });
   }
 });
+
 router.get('/mystores/:id', async (req, res) => {
   try {
     const stores = await Store.find({ user: req.params?._id })
