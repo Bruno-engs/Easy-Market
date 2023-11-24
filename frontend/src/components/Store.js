@@ -48,18 +48,16 @@ const onClickHandler = (event) => {
                     className="img-fluid " />
             </div>
             <div className="d-inline-block px-3 top">
-                <b className="thicker ">{store?.name}</b>
+                <b className="cat">{store?.name}</b>
                 <div className="store-infos ">
                     <span className="mdi mdi-star"></span>
-                    
                         <b className="thicker ">
                         {store.rating}
                         </b>
-                    
                     <span className="mdi mdi-cart-outline pl-2"></span>
-                    <b>{store.category}</b>
+                    <b className="category">{store.category}</b>
                     <span className="mdi mdi-crosshairs-gps pl-2"></span>
-                    <b>2,9km</b>
+                    <b>2,9 km</b>
                 </div>
                 <span className="badge badge-primary">Frete Gratis</span>
 

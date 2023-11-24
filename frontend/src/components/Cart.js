@@ -27,7 +27,7 @@ const Cart = ({ product }) => {
         </div>
         <div className="col-4 text-end my-auto">
           <select
-            class="form-select "
+            className="form-select "
             aria-label="Default select example"
             value={product.qty}
             onChange={(e) =>
@@ -50,29 +50,4 @@ const Cart = ({ product }) => {
   );
 };
 
-export default Cart;/*                  <button
-className="btnn btn-danger mt-1"
-type='button'
-variant='light'
-onClick={() => removeFromCartHandler(product.product)}
->
-<i className='fas fa-trash'></i>
-</button>
-*/
-/*
-                  
-                  <select class="form-select" aria-label="Default select example">
-                    <option selected>0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                  </select>
-                    <button
-                      className="btn btn-danger"
-                      type='button'
-                      variant='light'
-                      onClick={() => removeFromCartHandler(item.product)}
-                    >
-                      <i className='fas fa-trash'></i>
-                    </button>
-*/
+export default Cart

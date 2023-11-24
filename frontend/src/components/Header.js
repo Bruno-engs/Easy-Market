@@ -68,7 +68,7 @@ const Header = () => {
             </LinkContainer>
             <Nav >
               <button onClick={openDrawer}
-                className="btn btn-secondary cart-button">
+                className="btn btn-secondary ">
                 <span className="mdi mdi-cart"></span>&nbsp;
                 ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
               </button>

@@ -368,10 +368,6 @@ b.thicker {
     border-color: rgb(var(--secondary));
 }
 
-
-
-
-
 .product-list{
   margin-top: 10px;
 }
@@ -407,4 +403,34 @@ background-color: #f6f5f5;
   padding: 1px 14px;
   font: 25px;
   margin-top: 20px;
+}
+.yellow-icon {
+  color: #FFD700;
+  font-size: 12px;
+}
+.store-infos b {
+  font-weight: bold;
+}
+
+.store-infos .rating,
+.store-infos .distance {
+  font-weight: bold;
+}
+
+.store-infos .category {
+  font-weight: normal;
+  font-size: 12px;
+  text-transform: uppercase;
+  
+}
+
+.store-infos {
+    font-family: 'Open Sans', sans-serif; 
+}
+
+.cat {
+  font-weight:700;
+  font-size: 15px;
+
+  
 }

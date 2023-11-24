@@ -17,92 +17,85 @@ import { Row, Col, ListGroup, Button, Form } from 'react-bootstrap'
 
 
 const StoreScreen = ({ match }) => {
-    //const keyword = match.params.keyword
-    //const [qty, setQty] = useState(1)
-    const [rating, setRating] = useState(0)
-    const [comment, setComment] = useState('')
-    //const pageNumber = match.params.pageNumber || 1
-    const dispatch = useDispatch();
-    /* const { store } = useSelector((state) => state.shop);
+  //const keyword = match.params.keyword
+  //const [qty, setQty] = useState(1)
+  const [rating, setRating] = useState(0)
+  const [comment, setComment] = useState('')
+  //const pageNumber = match.params.pageNumber || 1
+  const dispatch = useDispatch();
+  /* const { store } = useSelector((state) => state.shop);
 
-    useEffect(() => {
-        dispatch(requestStore(match.params.id));
-    }, [dispatch, match]);
-    //const storeList = useSelector((state) => state.storeList)
-    //const { stores } = storeList
+  useEffect(() => {
+      dispatch(requestStore(match.params.id));
+  }, [dispatch, match]);
+  //const storeList = useSelector((state) => state.storeList)
+  //const { stores } = storeList
 
-    const productList = useSelector((state) => state.productList)
-    const { loading, error, products, page, pages } = productList*/
+  const productList = useSelector((state) => state.productList)
+  const { loading, error, products, page, pages } = productList*/
 
-    const storeDetails = useSelector((state) => state.storeDetails)
-    const { store, loading, error, /*products*/ } = storeDetails
-    /*useEffect(() => {
-        dispatch(listStoreDetails(match.params?.id))
-        dispatch(listProducts(keyword, pageNumber));
+  const storeDetails = useSelector((state) => state.storeDetails)
+  const { store, loading, error, /*products*/ } = storeDetails
+  /*useEffect(() => {
+      dispatch(listStoreDetails(match.params?.id))
+      dispatch(listProducts(keyword, pageNumber));
 
-    }, [dispatch, keyword, pageNumber, match])
+  }, [dispatch, keyword, pageNumber, match])
 
-    const abc = () => {
-        console.log(store)
+  const abc = () => {
+      console.log(store)
 
-    }*/
-    const userLogin = useSelector((state) => state.userLogin)
-    const { userInfo } = userLogin
+  }*/
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
-    const productReviewCreate = useSelector((state) => state.productReviewCreate)
-    const {
-        success: successStoreReview,
-        loading: loadingStoreReview,
-        error: errorStoreReview,
-    } = productReviewCreate
-    useEffect(() => {
-        if (successStoreReview) {
-            setRating(0)
-            setComment('')
-        }
-        if (!store?._id || store?._id !== match.params?.id) {
-            dispatch(listStoreDetails(match.params.id))
-            dispatch({ type: STORE_CREATE_REVIEW_RESET })
-            
-        }
-    }, [dispatch, match, successStoreReview, store?._id])
+  const productReviewCreate = useSelector((state) => state.productReviewCreate)
+  const {
+    success: successStoreReview,
+    loading: loadingStoreReview,
+    error: errorStoreReview,
+  } = productReviewCreate
+  useEffect(() => {
+    if (successStoreReview) {
+      setRating(0)
+      setComment('')
+    }
+    if (!store?._id || store?._id !== match.params?.id) {
+      dispatch(listStoreDetails(match.params.id))
+      dispatch({ type: STORE_CREATE_REVIEW_RESET })
 
-    const submitHandler = (e) => {
-        e.preventDefault()
-        dispatch(
-          createStoreReview(match.params.id, {
-            rating,
-            comment,
-          })
-        )
-      }
-    return (
+    }
+  }, [dispatch, match, successStoreReview, store?._id])
 
-        <>
-        <Meta title={store.name} />
-        <div className="h-100">
-            <div className="container">
-                <div className="row">
-                    <div className="col-2">
-                        <img src={store?.image} alt=''
-                            className="img-fluid store-image" />
-                        <b>{store?.name}</b>
+  const submitHandler = (e) => {
+    e.preventDefault()
+    dispatch(
+      createStoreReview(match.params.id, {
+        rating,
+        comment,
+      })
+    )
+  }
+  return (
 
-                        <div className="store-infos">
-                            <span className="mdi mdi-star"></span>
-                            <text>
-                                <b>
-                                    {store?.rating}
-                                </b>
-                            </text>
-                            <text>{store?.category}</text> <br />
-                            <span className="mdi mdi-crosshairs-gps"></span>
-                            <text>2,9km</text>
-                        </div>
-                        <span className="badge badge-primary">Frete Gratis</span><br /> <br />
-
-
-                        <h4>Avaliações: </h4>
+    <>
+      <Meta title={store.name} />
+      <div className="h-100">
+        <div className="container">
+          <div className="row">
+            <div className="col-2">
+              <img src={store?.image} alt=''
+                className="img-fluid store-image" />
+              <b className="store-name">{store?.name}</b>
+              <div className="store-infos">
+                <i className="fa fa-star yellow-icon" aria-hidden="true"></i>
+                <b className="rating mr-3">{store?.rating}</b>
+                <b className="category">{store?.category}</b> <br />
+                <i className="fa fa-star yellow-icon" aria-hidden="true"></i>
+                <b className="distance">2,9km</b>
+              </div>
+              <span className="badge badge-primary">Frete Gratis</span><br /> <br />
+              <h5>Avaliações: </h5>
               {store.reviews.length === 0 && <Message>Sem Avaliações</Message>}
               <ListGroup variant='flush'>
                 {store.reviews.map((review) => (
@@ -155,33 +148,33 @@ const StoreScreen = ({ match }) => {
                   )}
                 </ListGroup.Item>
               </ListGroup>
-                    </div>
-              
-                    <div className="col-10">
-                        <h5>Produtos : ({store?.products?.length})</h5>
-                        {loading ? (
-                            <Loader />
-                        ) : error ? (
-                            <Message variant='danger'>{error}</Message>
-                        ) : (
-                            <>
-                                <Row>
-                                    {store?.products?.map((product) => (
-                                        <Col key={store?.products._id} sm={12} md={6} lg={4} xl={3}>
-                                            <Product product={product} />
-                                        </Col>
-                                    ))}
-                                </Row>
-                            </>
-                        )}
-                    </div>
-
-                </div>
             </div>
+
+            <div className="col-10">
+              <h5>Produtos : ({store?.products?.length})</h5>
+              {loading ? (
+                <Loader />
+              ) : error ? (
+                <Message variant='danger'>{error}</Message>
+              ) : (
+                <>
+                  <Row>
+                    {store?.products?.map((product) => (
+                      <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                        <Product product={product} />
+                      </Col>
+                    ))}
+                  </Row>
+                </>
+              )}
+            </div>
+
+          </div>
         </div>
-        </>
-    );
-    
+      </div>
+    </>
+  );
+
 }
 
 export default StoreScreen;

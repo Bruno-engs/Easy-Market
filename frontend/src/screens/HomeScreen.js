@@ -38,7 +38,7 @@ const HomeScreen = ({ match }) => {
   return (
     <>
       <Meta />
-      <h5 className='text-center'>Produtos cadastrados ({products?.length})</h5>
+      <h5 className='text-center'>Produtos anunciados ({products?.length})</h5>
       <Route render={({ history }) => <SearchBox history={history} />} />
       {!keyword ? (
         <ProductCarousel />
@@ -50,7 +50,7 @@ const HomeScreen = ({ match }) => {
       <h5>Lojas em destaque:({stores?.length})</h5>
       <ul className="col-12 store-list">
         {stores?.map((p) => (
-            <Store store={p} />
+            <Store key={p._id} store={p} />
         ))}
       </ul>
       <Map stores={stores} />

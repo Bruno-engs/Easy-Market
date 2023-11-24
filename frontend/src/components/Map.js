@@ -20,7 +20,7 @@ const Map = ({ stores }) => {
                 defaultZoom={defaultProps.zoom}
             >
                 {stores?.map(p => (
-                    <Marker store={p} lat={p.location.lat} lng={p.location.lng} image={p.image} />
+                    <Marker key={p._id} store={p} lat={p.location.lat} lng={p.location.lng} image={p.image} />
                 ))}
 
             </GoogleMapReact>
